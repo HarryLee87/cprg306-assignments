@@ -10,6 +10,13 @@ export default function NewItem() {
   const handleSubmit = (event) => {
     event.preventDefault();
 
+    const newEvent ={
+      name,
+      quantity,
+      category,
+    }
+    console.log(newEvent);
+
     alert(`Added item: ${name}, quantity: ${quantity}, category: ${category}`);
 
     setName("");
@@ -57,7 +64,7 @@ export default function NewItem() {
               ></input>
             </label>
             <label className="mt-3">
-              <span className="text-zinc-100">Quantity:</span>
+              <span className="text-zinc-100">Category:</span>
               <select
                 className="text-black mt-1 p-1 block w-full rounded-md bg-gray-100 focus:bg-white"
                 value={category}
