@@ -17,7 +17,7 @@ export default function NewItem() {
     }
     console.log(newEvent);
 
-    alert(`Added item: ${name}, quantity: ${quantity}, category: ${category}`);
+    alert(`Added item: ${newEvent.name}, quantity: ${newEvent.quantity}, category: ${newEvent.category}`);
 
     setName("");
     setQuantity(1);
