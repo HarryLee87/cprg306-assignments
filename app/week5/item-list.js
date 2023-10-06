@@ -3,11 +3,34 @@ import Item from "./item";
 import ItemData from "./items.json";
 
 export default function ItemList() {
+  //map the JSON data to an array
   let itemArray = ItemData.map((item) => ({ ...item }));
 
+  //set up states for sorting and grouped category
   let [sortBy, setSortBy] = useState("name");
-  //let [filter, setFilter] = useState("all")
+  let [groupedCategory, setGroupedCategory] = useState(false)
 
+  //if gorupedCategory is ture that a user clicks grouped category button, the items are listed by category. Or 
+  if(groupedCategory) {
+    
+    // created empty empty object for storing the items sorted by category.
+    const groupedItems = {};
+
+
+    itemArray.forEach((item) => {
+    if(!groupedItems[item.category]) {
+      groupedItems[item.category] = [];
+    }
+    groupedItems[item.category].push(item);
+    });
+
+  for(const category in groupedItems){
+    groupedItems[category].sort((a, b) => a.name.localeCompare(b.name));
+  }
+
+  itemArray = groupedItems;
+} 
+else {
   itemArray = itemArray.sort((a, b) => {
     if(isNaN(parseInt(a[sortBy]))){
         let nameA = a[sortBy].toUpperCase();
@@ -24,14 +47,8 @@ export default function ItemList() {
         return a[sortBy] - b[sortBy];
     }
   });
+}
 
-  let groupedItems = {};
-  itemArray.forEach((item) => {
-    if (!groupedItems[item.category]) {
-      groupedItems[item.category] = [];
-    }
-    groupedItems[item.category].push(item);
-  });
 
   return (
     <>
@@ -40,30 +57,36 @@ export default function ItemList() {
         <button
           className="m-2 p-2 bg-yellow-100 text-lime-900 rounded-md"
           value="name"
-          onClick={(event) => setSortBy(event.target.value)}
+          onClick={(event) => {setSortBy(event.target.value);
+          setGroupedCategory(false);}}
         >
           Name
         </button>
         <button className="m-2 p-2 bg-yellow-100 text-lime-900 rounded-md"
         value="category"
-        onClick={(event) => setSortBy(event.target.value)}>
+        onClick={(event) => {setSortBy(event.target.value);
+        setGroupedCategory(false)}}>
           Category
         </button>
         <button className="m-2 p-2 bg-yellow-100 text-lime-900 rounded-md"
-        //value="groupedCat"
-        value="Grouped Category" 
-        
-        onClick={groupedItems}>
+        value="category"
+        onClick={() => setGroupedCategory(true)}
+        >
           Grouped Category
         </button>
       </div>
 
       <section className="grid grid-cols-1 gap-5 p-5">
-        {itemArray.map((item) => (
-          <Item item={item} />
+        {groupedCategory ? Object.keys(itemArray).map((category) => (
+          <div key={category}>
+            <p className="text-2xl font-bold text-yellow-500">{category.toUpperCase()}</p>
+            {itemArray[category].map((item) => (<Item key={item.id} item={item} /> ))}
+          </div>
+        ))
+        : itemArray.map((item) => (
+          <Item key={item.id} item={item} />
         ))}
       </section>
     </>
   );
 }
-
