@@ -16,6 +16,13 @@ export default function ItemList() {
     // created empty empty object for storing the items sorted by category.
     const groupedItems = {};
 
+    // itemArray.reduce((groupedItems, item) => {
+    //   if(groupedItems[item.category] == ) {
+    //     groupedItems[item.category] = [];
+    //   }
+    //   groupedItems[item.category].push(item);
+    // });
+
 
     itemArray.forEach((item) => {
     if(!groupedItems[item.category]) {
@@ -80,7 +87,7 @@ else {
         {groupedCategory ? Object.keys(itemArray).map((category) => (
           <div key={category}>
             <p className="text-2xl font-bold text-yellow-500">{category.toUpperCase()}</p>
-            {itemArray[category].map((item) => (<Item key={item.id} item={item} /> ))}
+            <li>{itemArray[category].map((item) => (<Item key={item.id} item={item} /> ))}</li>
           </div>
         ))
         : itemArray.map((item) => (
