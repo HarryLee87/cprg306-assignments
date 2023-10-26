@@ -18,7 +18,12 @@ export default function Page() {
   };
 
   const handleItemSelect = (item) => {
-    let cleanedItemName = item.name.split(",")[0].trim().replace("/[\u{1F600}-\u{1F6FF}]/gu", "");
+    let cleanedItemName;
+    if (item.name.includes(",")) {
+      cleanedItemName = item.name.split(",")[0].trim();
+    } else {
+      cleanedItemName = item.name.split(" ")[0].trim();
+    }
     setSelectedItemName(cleanedItemName);
   };
   return (
