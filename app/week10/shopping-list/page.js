@@ -1,21 +1,35 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { addNewItem, getItemList } from "../_services/shopping-list-service";
+
 import ItemList from "./item-list";
 import NewItem from "./new-item";
-import ItemData from "./items.json";
-import MealIdeas from "./meal-ideas";
 
+import MealIdeas from "./meal-ideas";
+import { useUserAuth } from "../_utils/auth-context";
 
 export default function Page() {
-  const [items, setItems] = useState(ItemData);
+  const [items, setItems] = useState([]);
   const [selectedItemName, setSelectedItemName] = useState("");
+  const { user } = useUserAuth();
 
-  const handleAddItem = (event) => {
-    setItems([...items, event]);
+  useEffect(() => {
+    async function loadItems() {
+      if (user) {
+        const loadItemsResult = await getItemList(user.uid);
+        setItems(loadItemsResult);
+      }
+    }
 
-    
+    loadItems();
+  }, [user]);
+
+  const handleAddItem = async (newItem) => {
+    const addedItem = await addNewItem(user.uid, newItem);
+   setItems(prevItems => [...prevItems, { ...newItem, id: addedItem }]);
   };
+  
 
   const handleItemSelect = (item) => {
     let cleanedItemName;
@@ -26,6 +40,9 @@ export default function Page() {
     }
     setSelectedItemName(cleanedItemName);
   };
+
+
+
   return (
     <main>
       <h1 className="text-5xl font-semibold text-justified text-justified m-5">

@@ -5,7 +5,8 @@ export async function addNewItem(userId, itemObj){
     try {
         let userItemsCollectionReference = collection(db, "users", userId, "items");
         let addItemPromise = await addDoc(userItemsCollectionReference, itemObj)//reference where you add the item
-        console.log(addItemPromise.id);
+        console.log(addItemPromise.id)
+        return addItemPromise.id;
     } catch (error) {
         console.log(error);
     }
